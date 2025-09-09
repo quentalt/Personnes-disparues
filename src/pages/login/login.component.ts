@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="auth-container">
         <div class="auth-header">
           <a routerLink="/" class="logo">
-            <img src="/src/assets/Logo.png" alt="Logo" class="logo-icon">
+            <img src="https://plus.unsplash.com/premium_photo-1687157829884-fae305709c06?w=120&h=60&auto=format&fit=crop&q=80&crop=center" alt="Logo" class="logo-icon">
           </a>
           <h1 class="auth-title">Connexion</h1>
           <p class="auth-subtitle">

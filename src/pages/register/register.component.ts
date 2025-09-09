@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="auth-container">
         <div class="auth-header">
           <a routerLink="/" class="logo">
-            <img src="/src/assets/Logo.png" alt="Logo" class="logo-icon">
+            <img src="https://plus.unsplash.com/premium_photo-1687157829884-fae305709c06?w=120&h=60&auto=format&fit=crop&q=80&crop=center" alt="Logo" class="logo-icon">
           </a>
           <h1 class="auth-title">Créer un compte</h1>
           <p class="auth-subtitle">
@@ -167,7 +167,9 @@ import { AuthService } from '../../services/auth.service';
     }
 
     .logo-icon {
-      font-size: 28px;
+      width: 120px;
+      height: 60px;
+      object-fit: contain;
     }
 
     .auth-title {
@@ -196,6 +198,28 @@ import { AuthService } from '../../services/auth.service';
       margin-bottom: var(--spacing-6);
     }
 
+    .label {
+      display: block;
+      margin-bottom: var(--spacing-2);
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    .input {
+      width: 100%;
+      padding: var(--spacing-3);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
     .input.error {
       border-color: var(--error);
       box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
@@ -205,6 +229,30 @@ import { AuthService } from '../../services/auth.service';
       color: var(--error);
       font-size: 14px;
       margin-top: var(--spacing-1);
+    }
+
+    .btn {
+      padding: var(--spacing-3) var(--spacing-6);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-red);
+      color: var(--white);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-red-dark, #dc2626);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .btn-full {
@@ -246,9 +294,9 @@ export class RegisterComponent {
   registerError = '';
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+      private fb: FormBuilder,
+      private authService: AuthService,
+      private router: Router
   ) {
     this.registerForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -262,20 +310,18 @@ export class RegisterComponent {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       return { passwordMismatch: true };
     }
     return null;
   }
 
-isFieldInvalid(fieldName: string): boolean {
-  const field = this.registerForm.get(fieldName);
-  return (
-    !!field && field.invalid && ((!!field.dirty) || (!!field.touched))
-  ) || 
-  (fieldName === 'confirmPassword' && this.registerForm.hasError('passwordMismatch') && !!field?.touched);
-}
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.registerForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched)) ||
+        (fieldName === 'confirmPassword' && this.registerForm.hasError('passwordMismatch') && !!field?.touched);
+  }
 
   onSubmit() {
     if (this.registerForm.valid) {
