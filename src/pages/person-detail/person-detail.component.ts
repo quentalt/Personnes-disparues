@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MissingPersonService } from '../../services/missing-person.service';
+import { AuthService } from '../../services/auth.service';
 import { MissingPerson } from '../../models/missing-person.model';
 
 @Component({
@@ -25,11 +26,11 @@ import { MissingPerson } from '../../models/missing-person.model';
         <div class="person-detail" *ngIf="person$ | async as person">
           <div class="person-header">
             <div class="person-image-container">
-              <img 
-                [src]="person.photo || '/api/placeholder/400/400'" 
-                [alt]="person.fullName"
-                class="person-image"
-                (error)="onImageError($event)"
+              <img
+                  [src]="person.photo || '/api/placeholder/400/400'"
+                  [alt]="person.fullName"
+                  class="person-image"
+                  (error)="onImageError($event)"
               />
               <div class="status-badge" [class]="'status-' + person.status">
                 {{ getStatusText(person.status) }}
@@ -58,19 +59,19 @@ import { MissingPerson } from '../../models/missing-person.model';
               </div>
 
               <div class="action-buttons">
-                <button class="btn btn-primary">
+                <a routerLink="/report-info" class="btn btn-primary">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                   J'ai des informations
-                </button>
-                <button class="btn btn-secondary">
+                </a>
+                <button class="btn btn-secondary" (click)="sharePersonInfo(person)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 12v1a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3v-1M8 1v11M5 8l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                   Partager
                 </button>
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" (click)="printPoster(person)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 1v6l3-3M8 7L5 4M1 9v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -88,7 +89,7 @@ import { MissingPerson } from '../../models/missing-person.model';
 
             <div class="detail-section">
               <h2 class="section-title">Informations de contact</h2>
-              <div class="contact-info">
+              <div class="contact-info" [class.blurred]="!isAuthenticated">
                 <div class="contact-item">
                   <span class="contact-label">Personne à contacter:</span>
                   <span class="contact-value">{{ person.contactName }}</span>
@@ -98,9 +99,21 @@ import { MissingPerson } from '../../models/missing-person.model';
                   <span class="contact-value">{{ person.contactInfo }}</span>
                 </div>
               </div>
+              <div class="login-prompt" *ngIf="!isAuthenticated">
+                <div class="login-overlay">
+                  <div class="login-message">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 1v6l3-3M12 7L9 4M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h4>Connexion requise</h4>
+                    <p>Connectez-vous pour voir les informations de contact</p>
+                    <a routerLink="/login" class="btn btn-primary btn-sm">Se connecter</a>
+                  </div>
+                </div>
+              </div>
               <div class="contact-note">
                 <p>
-                  <strong>Important:</strong> Si vous avez des informations concernant cette personne, 
+                  <strong>Important:</strong> Si vous avez des informations concernant cette personne,
                   contactez immédiatement les autorités locales ou la personne mentionnée ci-dessus.
                 </p>
               </div>
@@ -135,6 +148,14 @@ import { MissingPerson } from '../../models/missing-person.model';
         <div class="loading" *ngIf="!(person$ | async)">
           <div class="spinner"></div>
           <p>Chargement des détails...</p>
+        </div>
+
+        <!-- Share Success Message -->
+        <div class="share-success" *ngIf="shareSuccess">
+          <div class="success-content">
+            <div class="success-icon">✓</div>
+            <p>Informations copiées dans le presse-papiers!</p>
+          </div>
         </div>
       </div>
     </div>
@@ -301,6 +322,51 @@ import { MissingPerson } from '../../models/missing-person.model';
 
     .contact-info {
       margin-bottom: var(--spacing-4);
+      position: relative;
+    }
+
+    .contact-info.blurred {
+      filter: blur(5px);
+      pointer-events: none;
+    }
+
+    .login-prompt {
+      position: relative;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .login-overlay {
+      position: absolute;
+      top: -120px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      z-index: 10;
+    }
+
+    .login-message {
+      text-align: center;
+      padding: var(--spacing-6);
+    }
+
+    .login-message svg {
+      color: var(--primary-red);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .login-message h4 {
+      color: var(--gray-800);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .login-message p {
+      color: var(--gray-600);
+      margin-bottom: var(--spacing-4);
     }
 
     .contact-item {
@@ -387,6 +453,47 @@ import { MissingPerson } from '../../models/missing-person.model';
       100% { transform: rotate(360deg); }
     }
 
+    .share-success {
+      position: fixed;
+      top: var(--spacing-8);
+      right: var(--spacing-8);
+      background-color: var(--success);
+      color: var(--white);
+      padding: var(--spacing-4) var(--spacing-6);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    .success-content {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+    }
+
+    .success-icon {
+      width: 20px;
+      height: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
     @media (max-width: 768px) {
       .person-detail-page {
         padding: var(--spacing-4) 0;
@@ -424,24 +531,39 @@ import { MissingPerson } from '../../models/missing-person.model';
         align-items: flex-start;
         gap: var(--spacing-1);
       }
+
+      .share-success {
+        top: var(--spacing-4);
+        right: var(--spacing-4);
+        left: var(--spacing-4);
+      }
+
+      .login-overlay {
+        top: -100px;
+      }
     }
   `]
 })
 export class PersonDetailComponent implements OnInit {
   person$: Observable<MissingPerson | undefined> = of(undefined);
+  isAuthenticated = false;
+  shareSuccess = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private missingPersonService: MissingPersonService
-  ) {}
+      private route: ActivatedRoute,
+      private router: Router,
+      private missingPersonService: MissingPersonService,
+      private authService: AuthService
+  ) {
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
 
   ngOnInit() {
     this.person$ = this.route.params.pipe(
-      switchMap(params => {
-        const id = params['id'];
-        return this.missingPersonService.getMissingPersonById(id);
-      })
+        switchMap(params => {
+          const id = params['id'];
+          return this.missingPersonService.getMissingPersonById(id);
+        })
     );
   }
 
@@ -466,5 +588,157 @@ export class PersonDetailComponent implements OnInit {
       'closed': 'Fermé'
     };
     return statusMap[status] || status;
+  }
+
+  sharePersonInfo(person: MissingPerson) {
+    const shareText = `🚨 PERSONNE DISPARUE 🚨
+
+Nom: ${person.fullName}
+Âge: ${person.age} ans
+Disparu(e) le: ${this.formatDate(person.dateOfDisappearance)}
+Dernière localisation: ${person.lastKnownLocation}
+
+Description: ${person.description}
+
+Si vous avez des informations, contactez: ${person.contactName} - ${person.contactInfo}
+
+Partagez pour aider à retrouver cette personne!
+#PersonneDisparue #AideRecherche`;
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareText).then(() => {
+        this.showShareSuccess();
+      }).catch(() => {
+        this.fallbackCopyText(shareText);
+      });
+    } else {
+      this.fallbackCopyText(shareText);
+    }
+  }
+
+  private fallbackCopyText(text: string) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      this.showShareSuccess();
+    } catch (err) {
+      console.error('Erreur lors de la copie:', err);
+    }
+    document.body.removeChild(textArea);
+  }
+
+  private showShareSuccess() {
+    this.shareSuccess = true;
+    setTimeout(() => {
+      this.shareSuccess = false;
+    }, 3000);
+  }
+
+  printPoster(person: MissingPerson) {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      const posterHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Affiche - ${person.fullName}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 20px;
+              background: white;
+            }
+            .poster {
+              max-width: 600px;
+              margin: 0 auto;
+              border: 3px solid #dc2626;
+              padding: 20px;
+              text-align: center;
+            }
+            .header {
+              background-color: #dc2626;
+              color: white;
+              padding: 15px;
+              margin: -20px -20px 20px -20px;
+              font-size: 24px;
+              font-weight: bold;
+            }
+            .photo {
+              width: 200px;
+              height: 200px;
+              object-fit: cover;
+              border: 2px solid #ccc;
+              margin: 20px auto;
+              display: block;
+            }
+            .name {
+              font-size: 28px;
+              font-weight: bold;
+              margin: 20px 0;
+              color: #dc2626;
+            }
+            .details {
+              text-align: left;
+              margin: 20px 0;
+              line-height: 1.6;
+            }
+            .detail-item {
+              margin: 10px 0;
+              font-size: 16px;
+            }
+            .contact {
+              background-color: #fef2f2;
+              padding: 15px;
+              margin: 20px 0;
+              border-left: 4px solid #dc2626;
+            }
+            .footer {
+              margin-top: 30px;
+              font-size: 14px;
+              color: #666;
+            }
+            @media print {
+              body { margin: 0; }
+              .poster { border: 2px solid #000; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="poster">
+            <div class="header">PERSONNE DISPARUE</div>
+            <img src="${person.photo || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300'}" 
+                 alt="${person.fullName}" class="photo" />
+            <div class="name">${person.fullName}</div>
+            <div class="details">
+              <div class="detail-item"><strong>Âge au moment de la disparition:</strong> ${person.age} ans</div>
+              <div class="detail-item"><strong>Date de disparition:</strong> ${this.formatDate(person.dateOfDisappearance)}</div>
+              <div class="detail-item"><strong>Dernière localisation connue:</strong> ${person.lastKnownLocation}</div>
+              <div class="detail-item"><strong>Description:</strong> ${person.description}</div>
+            </div>
+            <div class="contact">
+              <strong>Si vous avez des informations:</strong><br>
+              Contactez: ${person.contactName}<br>
+              ${person.contactInfo}
+            </div>
+            <div class="footer">
+              Merci de partager cette affiche pour aider à retrouver cette personne
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      printWindow.document.write(posterHTML);
+      printWindow.document.close();
+
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.close();
+      };
+    }
   }
 }

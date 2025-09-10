@@ -10,6 +10,7 @@ import { HeaderComponent } from './components/header/header.component';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterModule, HeaderComponent],
+
   template: `
     <div class="app">
       <app-header></app-header>

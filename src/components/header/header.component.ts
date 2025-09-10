@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -21,22 +20,22 @@ import { Observable } from 'rxjs';
             <div class="nav-links desktop-only">
               <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
               <a routerLink="/search" routerLinkActive="active">Recherche</a>
-              <a routerLink="/about" routerLinkActive="active">À propos</a>
               <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
+              <a routerLink="/about" routerLinkActive="active">À propos</a>
             </div>
 
             <div class="nav-actions">
-              <a *ngIf="!currentUser" routerLink="/login" class="btn btn-secondary btn-sm">
+              <a *ngIf="!currentUser" routerLink="/login" class="btn btn-secondary btn-sm desktop-only">
                 Connexion
               </a>
-              <a *ngIf="!currentUser" routerLink="/register" class="btn btn-primary btn-sm">
+              <a *ngIf="!currentUser" routerLink="/register" class="btn btn-primary btn-sm desktop-only">
                 Inscription
               </a>
-              <a *ngIf="currentUser" routerLink="/report" class="btn btn-primary btn-sm">
+              <a *ngIf="currentUser" routerLink="/report" class="btn btn-primary btn-sm desktop-only">
                 Signaler une disparition
               </a>
 
-              <div *ngIf="currentUser" class="user-menu">
+              <div *ngIf="currentUser" class="user-menu desktop-only">
                 <div class="user-info">
                   <span class="user-name">{{ currentUser.firstName }}</span>
                   <span class="user-role" [class.admin]="currentUser.role === 'admin'">
@@ -49,27 +48,35 @@ import { Observable } from 'rxjs';
               </div>
 
               <button class="mobile-menu-btn mobile-only" (click)="toggleMobileMenu()">
-                <span class="hamburger"></span>
-                <span class="hamburger"></span>
-                <span class="hamburger"></span>
+                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
+                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
+                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
               </button>
             </div>
           </div>
 
           <!-- Mobile Menu -->
-          <div class="mobile-menu" [class.open]="mobileMenuOpen">
+          <div class="mobile-menu mobile-only" [class.open]="mobileMenuOpen">
             <div class="mobile-nav-links">
               <a routerLink="/" (click)="closeMobileMenu()">Accueil</a>
               <a routerLink="/search" (click)="closeMobileMenu()">Recherche</a>
               <a routerLink="/about" (click)="closeMobileMenu()">À propos</a>
               <a routerLink="/resources" (click)="closeMobileMenu()">Ressources</a>
               <a *ngIf="isAdmin" routerLink="/admin" (click)="closeMobileMenu()">Admin</a>
+              <a *ngIf="currentUser" routerLink="/report" (click)="closeMobileMenu()" class="mobile-report-btn">
+                Signaler une disparition
+              </a>
               <div class="mobile-auth" *ngIf="!currentUser">
                 <a routerLink="/login" (click)="closeMobileMenu()">Connexion</a>
                 <a routerLink="/register" (click)="closeMobileMenu()">Inscription</a>
               </div>
               <div class="mobile-user" *ngIf="currentUser">
-                <span>{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                <div class="mobile-user-info">
+                  <span class="mobile-user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                  <span class="mobile-user-role" [class.admin]="currentUser.role === 'admin'">
+                    {{ currentUser.role === 'admin' ? 'Admin' : 'Utilisateur' }}
+                  </span>
+                </div>
                 <button (click)="logout(); closeMobileMenu()">Déconnexion</button>
               </div>
             </div>
@@ -105,15 +112,12 @@ import { Observable } from 'rxjs';
     }
 
     .logo-icon {
-      width: 120px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 4px;
+      font-size: 24px;
     }
 
     .nav-links {
       display: flex;
-      gap: var(--spacing-10);
+      gap: var(--spacing-12);
     }
 
     .nav-links a {
@@ -198,64 +202,136 @@ import { Observable } from 'rxjs';
     .mobile-menu-btn {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 4px;
       background: none;
       border: none;
-      padding: var(--spacing-2);
+      padding: var(--spacing-3);
       cursor: pointer;
+      width: 40px;
+      height: 40px;
     }
 
     .hamburger {
-      width: 20px;
+      width: 24px;
       height: 2px;
       background-color: var(--gray-600);
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.active:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
     }
 
     .mobile-menu {
       display: none;
-      padding: var(--spacing-4) 0;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--white);
+      box-shadow: var(--shadow-lg);
       border-top: 1px solid var(--gray-200);
+      z-index: 1000;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
     }
 
     .mobile-menu.open {
       display: block;
+      max-height: 500px;
     }
 
     .mobile-nav-links {
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-4);
+      padding: var(--spacing-4);
     }
 
     .mobile-nav-links a {
       text-decoration: none;
       color: var(--gray-600);
       font-weight: 500;
-      padding: var(--spacing-2);
+      padding: var(--spacing-4);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-links a:hover {
+      background-color: var(--gray-50);
+      color: var(--primary-red);
+    }
+
+    .mobile-report-btn {
+      background-color: var(--primary-red) !important;
+      color: var(--white) !important;
+      font-weight: 600 !important;
+      margin: var(--spacing-2) 0;
     }
 
     .mobile-auth {
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-2);
       padding-top: var(--spacing-4);
+      margin-top: var(--spacing-4);
       border-top: 1px solid var(--gray-200);
     }
 
     .mobile-user {
       padding-top: var(--spacing-4);
+      margin-top: var(--spacing-4);
       border-top: 1px solid var(--gray-200);
+    }
+
+    .mobile-user-info {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: var(--spacing-3);
+    }
+
+    .mobile-user-name {
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .mobile-user-role {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+    }
+
+    .mobile-user-role.admin {
+      color: var(--primary-red);
+      font-weight: 600;
     }
 
     .mobile-user button {
       background: none;
-      border: none;
+      border: 1px solid var(--primary-red);
       color: var(--primary-red);
       font-weight: 500;
       cursor: pointer;
-      margin-top: var(--spacing-2);
+      padding: var(--spacing-2) var(--spacing-4);
+      border-radius: var(--radius-md);
+      width: 100%;
+      transition: all 0.2s ease;
     }
+
+    .mobile-user button:hover {
+      background-color: var(--primary-red);
+      color: var(--white);
+    }
+
     .desktop-only {
       display: block;
     }
@@ -270,16 +346,15 @@ import { Observable } from 'rxjs';
       }
 
       .mobile-only {
-        display: block;
+        display: flex;
       }
 
-      .user-menu {
-        flex-direction: column;
-        gap: var(--spacing-2);
+      .nav-content {
+        position: relative;
       }
 
-      .user-info {
-        align-items: center;
+      .container {
+        position: relative;
       }
     }
   `]

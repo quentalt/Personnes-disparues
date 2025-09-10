@@ -8,16 +8,18 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
+import {AboutComponent} from "./pages/about/about";
+import {ReportInfoComponent} from "./pages/report-info/report-info.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'report', component: ReportComponent, canActivate: [AuthGuard] },
+  { path: 'report-info', component: ReportInfoComponent },
   { path: 'search', component: SearchComponent },
   { path: 'person/:id', component: PersonDetailComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
-  { path: 'about', redirectTo: '/' }, // Placeholder
-  { path: 'resources', redirectTo: '/' }, // Placeholder
+  { path: 'about', component : AboutComponent },
   { path: '**', redirectTo: '/' }
 ];

@@ -2,67 +2,71 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchFilters } from '../../models/missing-person.model';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {matFilterAlt} from "@ng-icons/material-icons/baseline";
+import {heroMagnifyingGlass} from "@ng-icons/heroicons/outline";
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgIcon],
+  viewProviders: [provideIcons({
+    matFilterAlt, heroMagnifyingGlass
+  })],
   template: `
     <div class="search-bar">
       <div class="search-input-group">
         <div class="search-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <ng-icon name="heroMagnifyingGlass" size="24" />
         </div>
         <input
-          type="text"
-          class="search-input"
-          placeholder="Rechercher par nom, ville ou région..."
-          [(ngModel)]="searchQuery"
-          (keyup.enter)="onSearch()"
+            type="text"
+            class="search-input"
+            placeholder="Rechercher par nom, ville ou région..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
         />
         <button class="search-button" (click)="onSearch()">
           Rechercher
         </button>
       </div>
-      
+
       <div class="advanced-filters" *ngIf="showAdvanced">
         <div class="filter-row">
           <div class="filter-group">
             <label class="label">Lieu de disparition</label>
             <input
-              type="text"
-              class="input"
-              placeholder="Ville, région..."
-              [(ngModel)]="locationFilter"
+                type="text"
+                class="input"
+                placeholder="Ville, région..."
+                [(ngModel)]="locationFilter"
             />
           </div>
-          
+
           <div class="filter-group">
             <label class="label">Âge (min - max)</label>
             <div class="age-range">
               <input
-                type="number"
-                class="input age-input"
-                placeholder="Min"
-                [(ngModel)]="minAge"
-                min="0"
-                max="150"
+                  type="number"
+                  class="input age-input"
+                  placeholder="Min"
+                  [(ngModel)]="minAge"
+                  min="0"
+                  max="150"
               />
               <span>-</span>
               <input
-                type="number"
-                class="input age-input"
-                placeholder="Max"
-                [(ngModel)]="maxAge"
-                min="0"
-                max="150"
+                  type="number"
+                  class="input age-input"
+                  placeholder="Max"
+                  [(ngModel)]="maxAge"
+                  min="0"
+                  max="150"
               />
             </div>
           </div>
         </div>
-        
+
         <div class="filter-row">
           <div class="filter-group">
             <label class="label">Statut</label>
@@ -73,25 +77,25 @@ import { SearchFilters } from '../../models/missing-person.model';
               <option value="closed">Fermé</option>
             </select>
           </div>
-          
+
           <div class="filter-group">
             <label class="label">Période de disparition</label>
             <div class="date-range">
               <input
-                type="date"
-                class="input date-input"
-                [(ngModel)]="startDate"
+                  type="date"
+                  class="input date-input"
+                  [(ngModel)]="startDate"
               />
               <span>à</span>
               <input
-                type="date"
-                class="input date-input"
-                [(ngModel)]="endDate"
+                  type="date"
+                  class="input date-input"
+                  [(ngModel)]="endDate"
               />
             </div>
           </div>
         </div>
-        
+
         <div class="filter-actions">
           <button class="btn btn-secondary btn-sm" (click)="clearFilters()">
             Effacer les filtres
@@ -101,11 +105,9 @@ import { SearchFilters } from '../../models/missing-person.model';
           </button>
         </div>
       </div>
-      
+
       <button class="advanced-toggle" (click)="toggleAdvanced()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 7h10M6 3v8M10 5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <ng-icon name="matFilterAlt"/>
         {{ showAdvanced ? 'Masquer' : 'Filtres avancés' }}
       </button>
     </div>
@@ -136,6 +138,9 @@ import { SearchFilters } from '../../models/missing-person.model';
     .search-icon {
       padding: 0 var(--spacing-4);
       color: var(--gray-400);
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
     }
 
     .search-input {
@@ -161,6 +166,7 @@ import { SearchFilters } from '../../models/missing-person.model';
       cursor: pointer;
       transition: all 0.2s ease;
       margin: var(--spacing-1);
+      flex-shrink: 0;
     }
 
     .search-button:hover {
@@ -236,17 +242,36 @@ import { SearchFilters } from '../../models/missing-person.model';
 
     @media (max-width: 768px) {
       .search-input-group {
-        flex-direction: column;
-        gap: var(--spacing-2);
+        /* Garde la structure flex pour maintenir la loupe à côté du texte */
+        flex-wrap: wrap;
+      }
+
+      .search-icon {
+        /* Réduit légèrement la taille de l'icône sur mobile */
+        padding: 0 var(--spacing-3);
+      }
+
+      .search-icon ng-icon {
+        width: 20px !important;
+        height: 20px !important;
       }
 
       .search-input {
-        padding: var(--spacing-3) var(--spacing-4);
+        padding: var(--spacing-3) var(--spacing-2);
+        font-size: 14px;
+        min-width: 0; /* Permet au texte de se comprimer si nécessaire */
+      }
+
+      .search-input::placeholder {
+        /* Raccourcit le placeholder sur mobile pour éviter la troncature */
+        content: "Rechercher par nom, ville...";
       }
 
       .search-button {
         width: 100%;
-        margin: 0;
+        margin: var(--spacing-2) 0 0 0;
+        order: 3; /* Place le bouton en dernier */
+        flex-basis: 100%; /* Prend toute la largeur */
       }
 
       .filter-row {
@@ -261,11 +286,27 @@ import { SearchFilters } from '../../models/missing-person.model';
         width: 100%;
       }
     }
+
+    /* Breakpoint plus petit pour les très petits écrans */
+    @media (max-width: 480px) {
+      .search-input::placeholder {
+        font-size: 13px;
+      }
+
+      .search-icon {
+        padding: 0 var(--spacing-2);
+      }
+
+      .search-icon ng-icon {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
   `]
 })
 export class SearchBarComponent {
   @Output() search = new EventEmitter<SearchFilters>();
-  
+
   searchQuery = '';
   locationFilter = '';
   minAge: number | null = null;
@@ -279,12 +320,12 @@ export class SearchBarComponent {
     const filters: SearchFilters = {
       query: this.searchQuery || undefined,
       location: this.locationFilter || undefined,
-      ageRange: (this.minAge !== null && this.maxAge !== null) 
-        ? { min: this.minAge, max: this.maxAge }
-        : undefined,
+      ageRange: (this.minAge !== null && this.maxAge !== null)
+          ? { min: this.minAge, max: this.maxAge }
+          : undefined,
       dateRange: (this.startDate && this.endDate)
-        ? { start: this.startDate, end: this.endDate }
-        : undefined,
+          ? { start: this.startDate, end: this.endDate }
+          : undefined,
       status: this.statusFilter || undefined
     };
 
