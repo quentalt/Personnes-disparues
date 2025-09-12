@@ -9,112 +9,110 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   template: `
-    <div class="auth-page">
-      <div class="auth-container">
-        <div class="auth-header">
-          <a routerLink="/" class="logo">
-            <img src="https://plus.unsplash.com/premium_photo-1687157829884-fae305709c06?w=120&h=60&auto=format&fit=crop&q=80&crop=center" alt="Logo" class="logo-icon">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8 md:p-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <a routerLink="/" class="inline-block mb-4">
+            <img src="./assets/images/image-6.png" alt="Logo" class="w-16 h-16 object-cover mx-auto rounded-full">
           </a>
-          <h1 class="auth-title">Créer un compte</h1>
-          <p class="auth-subtitle">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Créer un compte</h1>
+          <p class="text-gray-500 text-sm md:text-base">
             Rejoignez notre communauté pour aider à retrouver les personnes disparues
           </p>
         </div>
 
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="label" for="firstName">Prénom</label>
+        <!-- Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
               <input
                   type="text"
                   id="firstName"
-                  class="input"
                   placeholder="Votre prénom"
                   formControlName="firstName"
-                  [class.error]="isFieldInvalid('firstName')"
+                  class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                  [class.border-red-500]="isFieldInvalid('firstName')"
               />
-              <div class="error-message" *ngIf="isFieldInvalid('firstName')">
+              <p *ngIf="isFieldInvalid('firstName')" class="text-red-500 text-xs mt-1">
                 Le prénom est requis
-              </div>
+              </p>
             </div>
 
-            <div class="form-group">
-              <label class="label" for="lastName">Nom</label>
+            <div>
+              <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
               <input
                   type="text"
                   id="lastName"
-                  class="input"
                   placeholder="Votre nom"
                   formControlName="lastName"
-                  [class.error]="isFieldInvalid('lastName')"
+                  class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                  [class.border-red-500]="isFieldInvalid('lastName')"
               />
-              <div class="error-message" *ngIf="isFieldInvalid('lastName')">
+              <p *ngIf="isFieldInvalid('lastName')" class="text-red-500 text-xs mt-1">
                 Le nom est requis
-              </div>
+              </p>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="label" for="email">Adresse email</label>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse email</label>
             <input
                 type="email"
                 id="email"
-                class="input"
                 placeholder="votre@email.com"
                 formControlName="email"
-                [class.error]="isFieldInvalid('email')"
+                class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                [class.border-red-500]="isFieldInvalid('email')"
             />
-            <div class="error-message" *ngIf="isFieldInvalid('email')">
+            <p *ngIf="isFieldInvalid('email')" class="text-red-500 text-xs mt-1">
               <span *ngIf="registerForm.get('email')?.hasError('required')">L'email est requis</span>
               <span *ngIf="registerForm.get('email')?.hasError('email')">Format d'email invalide</span>
-            </div>
+            </p>
           </div>
 
-          <div class="form-group">
-            <label class="label" for="password">Mot de passe</label>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <input
                 type="password"
                 id="password"
-                class="input"
                 placeholder="Choisissez un mot de passe"
                 formControlName="password"
-                [class.error]="isFieldInvalid('password')"
+                class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                [class.border-red-500]="isFieldInvalid('password')"
             />
-            <div class="error-message" *ngIf="isFieldInvalid('password')">
+            <p *ngIf="isFieldInvalid('password')" class="text-red-500 text-xs mt-1">
               <span *ngIf="registerForm.get('password')?.hasError('required')">Le mot de passe est requis</span>
               <span *ngIf="registerForm.get('password')?.hasError('minlength')">
                 Le mot de passe doit contenir au moins 6 caractères
               </span>
-            </div>
+            </p>
           </div>
 
-          <div class="form-group">
-            <label class="label" for="confirmPassword">Confirmer le mot de passe</label>
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
             <input
                 type="password"
                 id="confirmPassword"
-                class="input"
                 placeholder="Confirmez votre mot de passe"
                 formControlName="confirmPassword"
-                [class.error]="isFieldInvalid('confirmPassword')"
+                class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                [class.border-red-500]="isFieldInvalid('confirmPassword')"
             />
-            <div class="error-message" *ngIf="isFieldInvalid('confirmPassword')">
-              <span *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
-                La confirmation est requise
-              </span>
-              <span *ngIf="registerForm.hasError('passwordMismatch')">
-                Les mots de passe ne correspondent pas
-              </span>
-            </div>
+            <p *ngIf="isFieldInvalid('confirmPassword')" class="text-red-500 text-xs mt-1">
+              <span *ngIf="registerForm.get('confirmPassword')?.hasError('required')">La confirmation est requise</span>
+              <span *ngIf="registerForm.hasError('passwordMismatch')">Les mots de passe ne correspondent pas</span>
+            </p>
           </div>
 
-          <div class="error-message" *ngIf="registerError">
+          <div *ngIf="registerError" class="text-red-500 text-sm text-center">
             {{ registerError }}
           </div>
 
           <button
               type="submit"
-              class="btn btn-primary btn-full"
+              class="w-full bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 text-white font-semibold py-3 rounded-lg shadow-md transition"
               [disabled]="registerForm.invalid || isLoading"
           >
             <span *ngIf="isLoading">Création du compte...</span>
@@ -122,171 +120,15 @@ import { AuthService } from '../../services/auth.service';
           </button>
         </form>
 
-        <div class="auth-footer">
-          <p>
+        <div class="text-center mt-6">
+          <p class="text-gray-500 text-sm">
             Déjà un compte ?
-            <a routerLink="/login" class="auth-link">Se connecter</a>
+            <a routerLink="/login" class="text-red-500 hover:underline font-medium">Se connecter</a>
           </p>
         </div>
       </div>
     </div>
-  `,
-  styles: [`
-    .auth-page {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--spacing-4);
-    }
-
-    .auth-container {
-      background-color: var(--white);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-xl);
-      padding: var(--spacing-8);
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: var(--spacing-8);
-    }
-
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-2);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 24px;
-      color: var(--primary-red);
-      margin-bottom: var(--spacing-6);
-    }
-
-    .logo-icon {
-      width: 120px;
-      height: 60px;
-      object-fit: contain;
-    }
-
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-2);
-    }
-
-    .auth-subtitle {
-      color: var(--gray-600);
-      line-height: 1.5;
-    }
-
-    .auth-form {
-      margin-bottom: var(--spacing-6);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-4);
-    }
-
-    .form-group {
-      margin-bottom: var(--spacing-6);
-    }
-
-    .label {
-      display: block;
-      margin-bottom: var(--spacing-2);
-      font-weight: 500;
-      color: var(--gray-700);
-    }
-
-    .input {
-      width: 100%;
-      padding: var(--spacing-3);
-      border: 1px solid var(--gray-300);
-      border-radius: var(--radius-md);
-      font-size: 16px;
-      transition: border-color 0.2s ease;
-    }
-
-    .input:focus {
-      outline: none;
-      border-color: var(--primary-red);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    .input.error {
-      border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    .error-message {
-      color: var(--error);
-      font-size: 14px;
-      margin-top: var(--spacing-1);
-    }
-
-    .btn {
-      padding: var(--spacing-3) var(--spacing-6);
-      border: none;
-      border-radius: var(--radius-md);
-      font-weight: 500;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary {
-      background-color: var(--primary-red);
-      color: var(--white);
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background-color: var(--primary-red-dark, #dc2626);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .btn-full {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .auth-footer {
-      text-align: center;
-      padding-top: var(--spacing-6);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .auth-link {
-      color: var(--primary-red);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .auth-link:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .auth-container {
-        padding: var(--spacing-6);
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-2);
-      }
-    }
-  `]
+  `
 })
 export class RegisterComponent {
   registerForm: FormGroup;
@@ -331,7 +173,7 @@ export class RegisterComponent {
       const { confirmPassword, ...userData } = this.registerForm.value;
 
       this.authService.register(userData).subscribe({
-        next: (response) => {
+        next: () => {
           this.isLoading = false;
           this.router.navigate(['/']);
         },

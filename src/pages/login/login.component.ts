@@ -9,57 +9,59 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   template: `
-    <div class="auth-page">
-      <div class="auth-container">
-        <div class="auth-header">
-          <a routerLink="/" class="logo">
-            <img src="https://plus.unsplash.com/premium_photo-1687157829884-fae305709c06?w=120&h=60&auto=format&fit=crop&q=80&crop=center" alt="Logo" class="logo-icon">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 md:p-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <a routerLink="/" class="inline-block mb-4">
+            <img src="./assets/images/image-6.png" alt="Logo" class="w-16 h-16 object-cover mx-auto rounded-full">
           </a>
-          <h1 class="auth-title">Connexion</h1>
-          <p class="auth-subtitle">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Connexion</h1>
+          <p class="text-gray-500 text-sm md:text-base">
             Connectez-vous pour signaler une disparition ou accéder à votre compte
           </p>
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
-          <div class="form-group">
-            <label class="label" for="email">Adresse email</label>
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse email</label>
             <input
                 type="email"
                 id="email"
-                class="input"
-                placeholder="votre@email.com"
                 formControlName="email"
-                [class.error]="isFieldInvalid('email')"
+                placeholder="votre@email.com"
+                class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                [class.border-red-500]="isFieldInvalid('email')"
             />
-            <div class="error-message" *ngIf="isFieldInvalid('email')">
+            <p *ngIf="isFieldInvalid('email')" class="text-red-500 text-xs mt-1">
               <span *ngIf="loginForm.get('email')?.hasError('required')">L'email est requis</span>
               <span *ngIf="loginForm.get('email')?.hasError('email')">Format d'email invalide</span>
-            </div>
+            </p>
           </div>
 
-          <div class="form-group">
-            <label class="label" for="password">Mot de passe</label>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <input
                 type="password"
                 id="password"
-                class="input"
-                placeholder="Votre mot de passe"
                 formControlName="password"
-                [class.error]="isFieldInvalid('password')"
+                placeholder="Votre mot de passe"
+                class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                [class.border-red-500]="isFieldInvalid('password')"
             />
-            <div class="error-message" *ngIf="isFieldInvalid('password')">
+            <p *ngIf="isFieldInvalid('password')" class="text-red-500 text-xs mt-1">
               Le mot de passe est requis
-            </div>
+            </p>
           </div>
 
-          <div class="error-message" *ngIf="loginError">
+          <div *ngIf="loginError" class="text-red-500 text-sm text-center">
             {{ loginError }}
           </div>
 
           <button
               type="submit"
-              class="btn btn-primary btn-full"
+              class="w-full bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 text-white font-semibold py-3 rounded-lg shadow-md transition"
               [disabled]="loginForm.invalid || isLoading"
           >
             <span *ngIf="isLoading">Connexion en cours...</span>
@@ -67,20 +69,24 @@ import { AuthService } from '../../services/auth.service';
           </button>
         </form>
 
-        <div class="auth-footer">
-          <p>
+        <!-- Footer -->
+        <div class="text-center mt-6">
+          <p class="text-gray-500 text-sm">
             Pas encore de compte ?
-            <a routerLink="/register" class="auth-link">Créer un compte</a>
+            <a routerLink="/register" class="text-red-500 hover:underline font-medium">Créer un compte</a>
           </p>
         </div>
 
-        <div class="demo-accounts">
-          <h3>Comptes de démonstration</h3>
-          <div class="demo-buttons">
-            <button class="btn btn-secondary btn-sm" (click)="loginAsAdmin()">
+        <!-- Demo Accounts -->
+        <div class="mt-8 border-t border-gray-200 pt-6 text-center">
+          <h3 class="text-gray-500 text-sm mb-4">Comptes de démonstration</h3>
+          <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <button (click)="loginAsAdmin()"
+                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded-lg transition">
               Connexion Admin
             </button>
-            <button class="btn btn-secondary btn-sm" (click)="loginAsUser()">
+            <button (click)="loginAsUser()"
+                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded-lg transition">
               Connexion Utilisateur
             </button>
           </div>
@@ -88,131 +94,7 @@ import { AuthService } from '../../services/auth.service';
       </div>
     </div>
   `,
-  styles: [`
-    .auth-page {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--spacing-4);
-    }
-
-    .auth-container {
-      background-color: var(--white);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-xl);
-      padding: var(--spacing-8);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: var(--spacing-8);
-    }
-
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-2);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 24px;
-      color: var(--primary-red);
-      margin-bottom: var(--spacing-6);
-    }
-
-    .logo-icon {
-      font-size: 28px;
-    }
-
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-2);
-    }
-
-    .auth-subtitle {
-      color: var(--gray-600);
-      line-height: 1.5;
-    }
-
-    .auth-form {
-      margin-bottom: var(--spacing-6);
-    }
-
-    .form-group {
-      margin-bottom: var(--spacing-6);
-    }
-
-    .input.error {
-      border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    .error-message {
-      color: var(--error);
-      font-size: 14px;
-      margin-top: var(--spacing-1);
-    }
-
-    .btn-full {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .auth-footer {
-      text-align: center;
-      padding-top: var(--spacing-6);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .auth-link {
-      color: var(--primary-red);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .auth-link:hover {
-      text-decoration: underline;
-    }
-
-    .demo-accounts {
-      margin-top: var(--spacing-6);
-      padding-top: var(--spacing-6);
-      border-top: 1px solid var(--gray-200);
-      text-align: center;
-    }
-
-    .demo-accounts h3 {
-      font-size: 14px;
-      color: var(--gray-600);
-      margin-bottom: var(--spacing-4);
-    }
-
-    .demo-buttons {
-      display: flex;
-      gap: var(--spacing-3);
-    }
-
-    .btn-sm {
-      padding: var(--spacing-2) var(--spacing-3);
-      font-size: 12px;
-      flex: 1;
-    }
-
-    @media (max-width: 480px) {
-      .auth-container {
-        padding: var(--spacing-6);
-      }
-
-      .demo-buttons {
-        flex-direction: column;
-      }
-    }
-  `]
+  styles: []
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -220,9 +102,9 @@ export class LoginComponent {
   loginError = '';
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+      private fb: FormBuilder,
+      private authService: AuthService,
+      private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -239,9 +121,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.loginError = '';
-
       this.authService.login(this.loginForm.value).subscribe({
-        next: (response) => {
+        next: () => {
           this.isLoading = false;
           this.router.navigate(['/']);
         },

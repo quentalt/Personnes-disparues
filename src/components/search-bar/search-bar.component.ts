@@ -1,308 +1,128 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgIcon } from '@ng-icons/core';
 import { SearchFilters } from '../../models/missing-person.model';
-import {NgIcon, provideIcons} from "@ng-icons/core";
-import {matFilterAlt} from "@ng-icons/material-icons/baseline";
-import {heroMagnifyingGlass} from "@ng-icons/heroicons/outline";
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
   imports: [CommonModule, FormsModule, NgIcon],
-  viewProviders: [provideIcons({
-    matFilterAlt, heroMagnifyingGlass
-  })],
   template: `
-    <div class="search-bar">
-      <div class="search-input-group">
-        <div class="search-icon">
-          <ng-icon name="heroMagnifyingGlass" size="24" />
+    <div class="flex flex-col">
+      <!-- Barre de recherche principale -->
+      <div class="flex items-center bg-gray-50 rounded-xl border border-gray-200 focus-within:ring-2 focus-within:ring-primary-100 focus-within:border-primary-600 transition-all duration-200">
+        <div class="pl-4 text-gray-400">
+          <ng-icon name="heroMagnifyingGlass" size="20"></ng-icon>
         </div>
         <input
             type="text"
-            class="search-input"
+            class="flex-1 px-4 py-3 bg-transparent border-none outline-none text-gray-800 placeholder-gray-400 text-base"
             placeholder="Rechercher par nom, ville ou région..."
             [(ngModel)]="searchQuery"
             (keyup.enter)="onSearch()"
         />
-        <button class="search-button" (click)="onSearch()">
+        <button class="bg-red-500 hover:bg-red-600 text-white rounded-xl px-4 py-3 m-1 font-medium transition-colors" (click)="onSearch()">
           Rechercher
         </button>
       </div>
 
-      <div class="advanced-filters" *ngIf="showAdvanced">
-        <div class="filter-row">
-          <div class="filter-group">
-            <label class="label">Lieu de disparition</label>
-            <input
-                type="text"
-                class="input"
-                placeholder="Ville, région..."
-                [(ngModel)]="locationFilter"
-            />
-          </div>
+      <!-- Filtres avancés -->
+      <div class="mt-4 transition-all duration-300 ease-in-out overflow-hidden" [class.max-h-96]="showAdvanced" [class.max-h-0]="!showAdvanced">
+        <div *ngIf="showAdvanced" class="pt-4 border-t border-gray-200">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Lieu de disparition</label>
+              <div class="relative">
+                <ng-icon name="heroMapPin" size="16" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></ng-icon>
+                <input
+                    type="text"
+                    class="w-full px-10 py-3 border rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-primary-100 focus:border-primary-600"
+                    placeholder="Ville, région..."
+                    [(ngModel)]="locationFilter"
+                />
+              </div>
+            </div>
 
-          <div class="filter-group">
-            <label class="label">Âge (min - max)</label>
-            <div class="age-range">
-              <input
-                  type="number"
-                  class="input age-input"
-                  placeholder="Min"
-                  [(ngModel)]="minAge"
-                  min="0"
-                  max="150"
-              />
-              <span>-</span>
-              <input
-                  type="number"
-                  class="input age-input"
-                  placeholder="Max"
-                  [(ngModel)]="maxAge"
-                  min="0"
-                  max="150"
-              />
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Âge (min - max)</label>
+              <div class="flex items-center gap-2">
+                <input
+                    type="number"
+                    class="flex-1 px-4 py-3 border rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-primary-100 focus:border-primary-600"
+                    placeholder="Min"
+                    [(ngModel)]="minAge"
+                    min="0"
+                    max="150"
+                />
+                <span class="text-gray-400">-</span>
+                <input
+                    type="number"
+                    class="flex-1 px-4 py-3 border rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-primary-100 focus:border-primary-600"
+                    placeholder="Max"
+                    [(ngModel)]="maxAge"
+                    min="0"
+                    max="150"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="filter-row">
-          <div class="filter-group">
-            <label class="label">Statut</label>
-            <select class="input" [(ngModel)]="statusFilter">
-              <option value="">Tous les statuts</option>
-              <option value="active">Recherché</option>
-              <option value="found">Retrouvé</option>
-              <option value="closed">Fermé</option>
-            </select>
-          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+              <select class="w-full px-4 py-3 border rounded-lg text-gray-800 focus:ring-2 focus:ring-primary-100 focus:border-primary-600" [(ngModel)]="statusFilter">
+                <option value="">Tous les statuts</option>
+                <option value="active">Recherché</option>
+                <option value="found">Retrouvé</option>
+                <option value="closed">Fermé</option>
+              </select>
+            </div>
 
-          <div class="filter-group">
-            <label class="label">Période de disparition</label>
-            <div class="date-range">
-              <input
-                  type="date"
-                  class="input date-input"
-                  [(ngModel)]="startDate"
-              />
-              <span>à</span>
-              <input
-                  type="date"
-                  class="input date-input"
-                  [(ngModel)]="endDate"
-              />
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Période de disparition</label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                  <ng-icon name="heroCalendarDays" size="16" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></ng-icon>
+                  <input
+                      type="date"
+                      class="w-full px-10 py-3 border rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-primary-100 focus:border-primary-600"
+                      [(ngModel)]="startDate"
+                  />
+                </div>
+                <span class="text-gray-400">à</span>
+                <div class="relative flex-1">
+                  <ng-icon name="heroCalendarDays" size="16" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></ng-icon>
+                  <input
+                      type="date"
+                      class="w-full px-10 py-3 border rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-primary-100 focus:border-primary-600"
+                      [(ngModel)]="endDate"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="filter-actions">
-          <button class="btn btn-secondary btn-sm" (click)="clearFilters()">
-            Effacer les filtres
-          </button>
-          <button class="btn btn-primary btn-sm" (click)="onSearch()">
-            Appliquer les filtres
-          </button>
+          <div class="flex flex-col sm:flex-row gap-3 justify-end pt-4 border-t border-gray-200">
+            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg px-4 py-2 font-medium transition-colors" (click)="clearFilters()">
+              Effacer les filtres
+            </button>
+            <button class="bg-red-500 hover:bg-red-600 text-white rounded-lg px-4 py-2 font-medium transition-colors" (click)="onSearch()">
+              Appliquer les filtres
+            </button>
+          </div>
         </div>
       </div>
 
-      <button class="advanced-toggle" (click)="toggleAdvanced()">
-        <ng-icon name="matFilterAlt"/>
+      <!-- Toggle avancé -->
+      <button
+          class="flex items-center gap-2 font-medium mt-4 transition-colors text-red-600 hover:text-red-700"  (click)="toggleAdvanced()"
+          >
+        <ng-icon name="heroCog6Tooth" size="16" class="transform" [class.rotate-90]="showAdvanced"></ng-icon>
         {{ showAdvanced ? 'Masquer' : 'Filtres avancés' }}
       </button>
     </div>
-  `,
-  styles: [`
-    .search-bar {
-      background-color: var(--white);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-lg);
-      padding: var(--spacing-4);
-      margin-bottom: var(--spacing-6);
-    }
-
-    .search-input-group {
-      display: flex;
-      align-items: center;
-      background-color: var(--gray-50);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-200);
-      transition: all 0.2s ease;
-    }
-
-    .search-input-group:focus-within {
-      border-color: var(--primary-red);
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-    }
-
-    .search-icon {
-      padding: 0 var(--spacing-4);
-      color: var(--gray-400);
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .search-input {
-      flex: 1;
-      padding: var(--spacing-4) var(--spacing-2);
-      border: none;
-      background: transparent;
-      font-size: 16px;
-      outline: none;
-    }
-
-    .search-input::placeholder {
-      color: var(--gray-400);
-    }
-
-    .search-button {
-      background-color: var(--primary-red);
-      color: var(--white);
-      border: none;
-      padding: var(--spacing-4) var(--spacing-6);
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin: var(--spacing-1);
-      flex-shrink: 0;
-    }
-
-    .search-button:hover {
-      background-color: var(--primary-red-hover);
-      transform: translateY(-1px);
-    }
-
-    .advanced-filters {
-      margin-top: var(--spacing-4);
-      padding-top: var(--spacing-4);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .filter-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-4);
-      margin-bottom: var(--spacing-4);
-    }
-
-    .filter-row:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-2);
-    }
-
-    .age-range,
-    .date-range {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-2);
-    }
-
-    .age-input,
-    .date-input {
-      flex: 1;
-    }
-
-    .filter-actions {
-      display: flex;
-      gap: var(--spacing-3);
-      justify-content: flex-end;
-      margin-top: var(--spacing-4);
-      padding-top: var(--spacing-4);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .btn-sm {
-      padding: var(--spacing-2) var(--spacing-4);
-      font-size: 14px;
-    }
-    .advanced-toggle {
-      background: none;
-      border: none;
-      color: var(--primary-red);
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: var(--spacing-4);
-      padding: var(--spacing-2) 0;
-      transition: color 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-2);
-    }
-
-    .advanced-toggle:hover {
-      color: var(--primary-red-hover);
-    }
-
-    @media (max-width: 768px) {
-      .search-input-group {
-        /* Garde la structure flex pour maintenir la loupe à côté du texte */
-        flex-wrap: wrap;
-      }
-
-      .search-icon {
-        /* Réduit légèrement la taille de l'icône sur mobile */
-        padding: 0 var(--spacing-3);
-      }
-
-      .search-icon ng-icon {
-        width: 20px !important;
-        height: 20px !important;
-      }
-
-      .search-input {
-        padding: var(--spacing-3) var(--spacing-2);
-        font-size: 14px;
-        min-width: 0; /* Permet au texte de se comprimer si nécessaire */
-      }
-
-      .search-input::placeholder {
-        /* Raccourcit le placeholder sur mobile pour éviter la troncature */
-        content: "Rechercher par nom, ville...";
-      }
-
-      .search-button {
-        width: 100%;
-        margin: var(--spacing-2) 0 0 0;
-        order: 3; /* Place le bouton en dernier */
-        flex-basis: 100%; /* Prend toute la largeur */
-      }
-
-      .filter-row {
-        grid-template-columns: 1fr;
-      }
-
-      .filter-actions {
-        flex-direction: column;
-      }
-
-      .filter-actions .btn {
-        width: 100%;
-      }
-    }
-
-    /* Breakpoint plus petit pour les très petits écrans */
-    @media (max-width: 480px) {
-      .search-input::placeholder {
-        font-size: 13px;
-      }
-
-      .search-icon {
-        padding: 0 var(--spacing-2);
-      }
-
-      .search-icon ng-icon {
-        width: 18px !important;
-        height: 18px !important;
-      }
-    }
-  `]
+  `
 })
 export class SearchBarComponent {
   @Output() search = new EventEmitter<SearchFilters>();

@@ -1,470 +1,216 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import {NgIcon} from "@ng-icons/core";
 
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgIcon],
   template: `
-    <div class="about-page">
+    <div class="min-h-screen bg-gray-50">
       <!-- Hero Section -->
-      <div class="hero-section">
-        <div class="container">
-          <div class="hero-content">
-            <h1 class="hero-title">À propos de nous</h1>
-            <p class="hero-subtitle">
-              Nous nous engageons à aider les familles et les proches à retrouver leurs êtres chers disparus
-            </p>
-          </div>
+      <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-20">
+        <div class="container text-center">
+          <h1 class="text-4xl text-[var(--primary-red)]  md:text-5xl font-bold mb-6">À propos de Recherchez-les</h1>
         </div>
-      </div>
+      </section>
 
       <!-- Mission Section -->
-      <div class="section">
+      <section class="py-20 bg-white">
         <div class="container">
-          <div class="content-grid">
-            <div class="text-content">
-              <h2 class="section-title">Notre mission</h2>
-              <p class="section-text">
-                Notre plateforme a été créée dans le but de faciliter la recherche de personnes disparues 
-                en centralisant les informations et en permettant à la communauté de participer activement 
-                aux recherches.
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+              <h2 class="text-3xl font-bold text-gray-800 mb-6">Notre Mission</h2>
+              <p class="text-lg text-gray-600 leading-relaxed">
+                Chaque année, des milliers de personnes disparaissent. Derrière chaque disparition,
+                il y a une famille qui souffre, des proches qui cherchent des réponses.
+                TrouverEux existe pour leur donner de l'espoir et des outils concrets.
               </p>
-              <p class="section-text">
-                Nous croyons que chaque personne mérite d'être retrouvée et que l'union fait la force. 
-                C'est pourquoi nous mettons à disposition des outils modernes et efficaces pour maximiser 
-                les chances de retrouver les personnes disparues.
-              </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+              <div class="text-center p-6">
+                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ng-icon name="heroUserGroup" size="32" class="text-primary-600"></ng-icon>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Communauté</h3>
+                <p class="text-gray-600">
+                  Mobiliser une communauté solidaire pour multiplier les chances de retrouver les personnes disparues.
+                </p>
+              </div>
+
+              <div class="text-center p-6">
+                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ng-icon name="heroMagnifyingGlass" size="32" class="text-primary-600"></ng-icon>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Recherche</h3>
+                <p class="text-gray-600">
+                  Faciliter la recherche grâce à des outils modernes et une base de données centralisée.
+                </p>
+              </div>
+
+              <div class="text-center p-6">
+                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ng-icon name="heroHome" size="32" class="text-primary-600"></ng-icon>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Espoir</h3>
+                <p class="text-gray-600">
+                  Redonner de l'espoir aux familles en leur offrant une plateforme pour agir concrètement.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Values Section -->
-      <div class="section section-gray">
+      <!-- How it Works -->
+      <section class="py-20 bg-gray-50">
         <div class="container">
-          <h2 class="section-title text-center">Nos valeurs</h2>
-          <div class="values-grid">
-            <div class="value-card">
-              <div class="value-icon">👥</div>
-              <h3 class="value-title">Communauté</h3>
-              <p class="value-text">
-                Nous croyons en la force de la communauté pour aider à retrouver les personnes disparues.
-              </p>
-            </div>
-            <div class="value-card">
-              <div class="value-icon">🔒</div>
-              <h3 class="value-title">Confidentialité</h3>
-              <p class="value-text">
-                La protection des données personnelles et la confidentialité sont nos priorités absolues.
-              </p>
-            </div>
-            <div class="value-card">
-              <div class="value-icon">⚡</div>
-              <h3 class="value-title">Rapidité</h3>
-              <p class="value-text">
-                Chaque minute compte. Nous nous efforçons de diffuser l'information le plus rapidement possible.
-              </p>
-            </div>
-            <div class="value-card">
-              <div class="value-icon">💝</div>
-              <h3 class="value-title">Empathie</h3>
-              <p class="value-text">
-                Nous comprenons la détresse des familles et agissons avec compassion et professionnalisme.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- How it works Section -->
-      <div class="section">
-        <div class="container">
-          <h2 class="section-title text-center">Comment ça fonctionne</h2>
-          <div class="steps-grid">
-            <div class="step">
-              <div class="step-number">1</div>
-              <h3 class="step-title">Signalement</h3>
-              <p class="step-text">
-                Créez un signalement détaillé avec photos et informations importantes.
-              </p>
-            </div>
-            <div class="step">
-              <div class="step-number">2</div>
-              <h3 class="step-title">Diffusion</h3>
-              <p class="step-text">
-                L'information est diffusée auprès de notre communauté d'utilisateurs.
-              </p>
-            </div>
-            <div class="step">
-              <div class="step-number">3</div>
-              <h3 class="step-title">Recherche</h3>
-              <p class="step-text">
-                La communauté participe activement à la recherche et partage des informations.
-              </p>
-            </div>
-            <div class="step">
-              <div class="step-number">4</div>
-              <h3 class="step-title">Retrouvailles</h3>
-              <p class="step-text">
-                Les informations recueillies aident à retrouver la personne disparue.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistics Section -->
-      <div class="section section-gray">
-        <div class="container">
-          <h2 class="section-title text-center">Nos résultats</h2>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-number">150+</div>
-              <div class="stat-label">Personnes retrouvées</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">2,500+</div>
-              <div class="stat-label">Utilisateurs actifs</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">500+</div>
-              <div class="stat-label">Signalements traités</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">24/7</div>
-              <div class="stat-label">Support disponible</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contact Section -->
-      <div class="section">
-        <div class="container">
-          <div class="contact-content">
-            <h2 class="section-title text-center">Contactez-nous</h2>
-            <p class="contact-text">
-              Vous avez des questions ou souhaitez en savoir plus sur notre mission ? 
-              N'hésitez pas à nous contacter.
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Comment ça fonctionne</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Un processus simple et efficace pour maximiser les chances de retrouver les personnes disparues.
             </p>
-            <div class="contact-actions">
-              <a href="mailto:contact@exemple.com" class="btn btn-primary">
-                Nous écrire
-              </a>
-              <a routerLink="/register" class="btn btn-secondary">
-                Rejoindre la communauté
-              </a>
+          </div>
+
+          <div class="max-w-5xl mx-auto grid gap-10">
+            <!-- Step 1 -->
+            <div class="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 hover:shadow-lg transition">
+              <div class="w-14 h-14 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                1
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Signalement</h3>
+                <p class="text-gray-600">
+                  Les proches signalent la disparition en remplissant un formulaire détaillé avec photo,
+                  description et dernière localisation connue.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 hover:shadow-lg transition">
+              <div class="w-14 h-14 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                2
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Diffusion</h3>
+                <p class="text-gray-600">
+                  L'information est immédiatement diffusée sur la plateforme et peut être partagée
+                  sur les réseaux sociaux pour maximiser la visibilité.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 hover:shadow-lg transition">
+              <div class="w-14 h-14 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                3
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Mobilisation</h3>
+                <p class="text-gray-600">
+                  La communauté se mobilise : recherches, partages, témoignages.
+                  Chaque action compte pour retrouver la personne disparue.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 hover:shadow-lg transition">
+              <div class="w-14 h-14 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                <ng-icon name="heroCheck" size="20"></ng-icon>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Retrouvailles</h3>
+                <p class="text-gray-600">
+                  Grâce à l'effort collectif, la personne est retrouvée et peut rentrer chez elle.
+                  Une famille est réunie, une communauté a fait la différence.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <!-- Statistics -->
+      <section class="py-20 bg-white">
+        <div class="container">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Notre Impact</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Des chiffres qui témoignent de l'efficacité de notre approche communautaire.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+            <div class="bg-gray-50 shadow rounded-xl p-6 text-center hover:shadow-lg transition">
+              <div class="text-4xl font-bold text-red-600 mb-2">150+</div>
+              <div class="text-gray-700 font-medium">Personnes retrouvées</div>
+            </div>
+            <div class="bg-gray-50 shadow rounded-xl p-6 text-center hover:shadow-lg transition">
+              <div class="text-4xl font-bold text-red-600 mb-2">500+</div>
+              <div class="text-gray-700 font-medium">Signalements traités</div>
+            </div>
+            <div class="bg-gray-50 shadow rounded-xl p-6 text-center hover:shadow-lg transition">
+              <div class="text-4xl font-bold text-red-600 mb-2">10k+</div>
+              <div class="text-gray-700 font-medium">Membres actifs</div>
+            </div>
+            <div class="bg-gray-50 shadow rounded-xl p-6 text-center hover:shadow-lg transition">
+              <div class="text-4xl font-bold text-red-600 mb-2">85%</div>
+              <div class="text-gray-700 font-medium">Taux de succès</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Call to Action -->
+      <section class="py-20 bg-gradient-to-r from-red-600 to-red-700 text-white relative">
+        <div class="container text-center">
+          <h2 class="text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-lg">
+            Rejoignez notre communauté
+          </h2>
+          <p class="text-lg mb-10 max-w-2xl mx-auto opacity-95">
+            Ensemble, nous pouvons faire la différence. Chaque membre de notre communauté
+            contribue à ramener les personnes disparues chez elles.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a routerLink="/register"
+               class="inline-flex items-center justify-center gap-2 bg-white text-red-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg shadow-md transition-all">
+              <ng-icon name="heroUser" size="20"></ng-icon>
+              Créer un compte
+            </a>
+            <a routerLink="/report"
+               class="inline-flex items-center justify-center gap-2 bg-red-800 hover:bg-red-900 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all">
+              <ng-icon name="heroPlus" size="20"></ng-icon>
+              Signaler une disparition
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- Contact -->
+      <section class="py-16 bg-gray-800 text-white">
+        <div class="container">
+          <div class="max-w-2xl mx-auto text-center">
+            <h3 class="text-2xl font-bold mb-6">Besoin d'aide ?</h3>
+            <p class="text-gray-300 mb-8">
+              Notre équipe est là pour vous accompagner dans vos démarches.
+              N'hésitez pas à nous contacter pour toute question.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+              <div class="flex items-center gap-3">
+                <ng-icon name="heroPhone" size="20" class="text-primary-400"></ng-icon>
+                <span>0800 123 456 (gratuit)</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <ng-icon name="heroEnvelope" size="20" class="text-primary-400"></ng-icon>
+                <span><a href="mailto:quentin.altieri@gmail.com" class="underline hover:text-primary-300"></a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   `,
-  styles: [`
-    .about-page {
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--spacing-4);
-    }
-
-    /* Hero Section */
-    .hero-section {
-      background: linear-gradient(135deg, var(--primary-red) 0%, #dc2626 100%);
-      color: var(--white);
-      padding: var(--spacing-16) 0 var(--spacing-12);
-      text-align: center;
-    }
-
-    .hero-title {
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: var(--spacing-4);
-      line-height: 1.2;
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-      opacity: 0.95;
-    }
-
-    /* Sections */
-    .section {
-      padding: var(--spacing-16) 0;
-    }
-
-    .section-gray {
-      background-color: var(--gray-50);
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-8);
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    .section-text {
-      font-size: 1.125rem;
-      line-height: 1.7;
-      color: var(--gray-600);
-      margin-bottom: var(--spacing-6);
-    }
-
-    /* Content Grid */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-12);
-      align-items: center;
-    }
-
-    .image-placeholder {
-      background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
-      border-radius: var(--radius-xl);
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .placeholder-content {
-      color: var(--gray-600);
-    }
-
-    .placeholder-icon {
-      font-size: 4rem;
-      display: block;
-      margin-bottom: var(--spacing-4);
-    }
-
-    /* Values Grid */
-    .values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--spacing-8);
-      margin-top: var(--spacing-12);
-    }
-
-    .value-card {
-      background: var(--white);
-      padding: var(--spacing-8);
-      border-radius: var(--radius-xl);
-      text-align: center;
-      box-shadow: var(--shadow-lg);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .value-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-xl);
-    }
-
-    .value-icon {
-      font-size: 3rem;
-      margin-bottom: var(--spacing-4);
-    }
-
-    .value-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-3);
-    }
-
-    .value-text {
-      color: var(--gray-600);
-      line-height: 1.6;
-    }
-
-    /* Steps Grid */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--spacing-8);
-      margin-top: var(--spacing-12);
-    }
-
-    .step {
-      text-align: center;
-    }
-
-    .step-number {
-      width: 60px;
-      height: 60px;
-      background: var(--primary-red);
-      color: var(--white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 0 auto var(--spacing-4);
-    }
-
-    .step-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-3);
-    }
-
-    .step-text {
-      color: var(--gray-600);
-      line-height: 1.6;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--spacing-8);
-      margin-top: var(--spacing-12);
-    }
-
-    .stat-card {
-      text-align: center;
-      background: var(--white);
-      padding: var(--spacing-8);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .stat-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--primary-red);
-      margin-bottom: var(--spacing-2);
-    }
-
-    .stat-label {
-      color: var(--gray-600);
-      font-weight: 500;
-    }
-
-    /* Contact Section */
-    .contact-content {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .contact-text {
-      font-size: 1.125rem;
-      color: var(--gray-600);
-      line-height: 1.7;
-      margin-bottom: var(--spacing-8);
-    }
-
-    .contact-actions {
-      display: flex;
-      gap: var(--spacing-4);
-      justify-content: center;
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      padding: var(--spacing-3) var(--spacing-6);
-      border-radius: var(--radius-md);
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background-color: var(--primary-red);
-      color: var(--white);
-    }
-
-    .btn-primary:hover {
-      background-color: #dc2626;
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .btn-secondary {
-      background-color: var(--white);
-      color: var(--primary-red);
-      border: 2px solid var(--primary-red);
-    }
-
-    .btn-secondary:hover {
-      background-color: var(--primary-red);
-      color: var(--white);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-title {
-        font-size: 2.5rem;
-      }
-
-      .hero-subtitle {
-        font-size: 1.125rem;
-      }
-
-      .section {
-        padding: var(--spacing-12) 0;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-
-      .content-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-8);
-      }
-
-      .contact-actions {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title {
-        font-size: 2rem;
-      }
-
-      .section-title {
-        font-size: 1.75rem;
-      }
-
-      .values-grid,
-      .steps-grid,
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  `]
+  styles: []
 })
-export class AboutComponent {
-  constructor() {}
-}
+export class AboutComponent {}

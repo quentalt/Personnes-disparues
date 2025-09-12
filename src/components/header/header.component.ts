@@ -3,82 +3,133 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
-
+import {NgIcon} from "@ng-icons/core";
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgIcon],
   template: `
-    <header class="header">
-      <nav class="nav">
-        <div class="container">
-          <div class="nav-content">
-            <a routerLink="/" class="logo">
-              <img src="https://plus.unsplash.com/premium_photo-1687157829884-fae305709c06?w=120&h=60&auto=format&fit=crop&q=80&crop=center" alt="Logo" class="logo-icon">
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <nav class="container">
+        <div class="flex items-center justify-between h-18">
+          <a routerLink="/" class="flex items-center">
+            <img src="./assets/images/image-6.png"
+                 alt="Logo"
+                 class="w-15 h-15 object-cover rounded-md" />
+          </a>
+
+          <div class="hidden md:flex items-center gap-12">
+            <a routerLink="/"
+               [routerLinkActiveOptions]="{ exact: true }"
+               routerLinkActive="text-red-600 after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-red-600 after:rounded"
+               class="relative py-2 px-3 text-gray-800 font-medium transition-colors hover:text-red-600 focus:text-red-600">
+              Accueil
             </a>
 
-            <div class="nav-links desktop-only">
-              <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
-              <a routerLink="/search" routerLinkActive="active">Recherche</a>
-              <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
-              <a routerLink="/about" routerLinkActive="active">À propos</a>
-            </div>
+            <a routerLink="/search"
+               routerLinkActive="text-red-600 after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-red-600 after:rounded"
+               class="relative py-2 px-3 text-gray-800 font-medium transition-colors hover:text-red-600 focus:text-red-600">
+              Recherche
+            </a>
 
-            <div class="nav-actions">
-              <a *ngIf="!currentUser" routerLink="/login" class="btn btn-secondary btn-sm desktop-only">
-                Connexion
-              </a>
-              <a *ngIf="!currentUser" routerLink="/register" class="btn btn-primary btn-sm desktop-only">
-                Inscription
-              </a>
-              <a *ngIf="currentUser" routerLink="/report" class="btn btn-primary btn-sm desktop-only">
-                Signaler une disparition
-              </a>
+            <a *ngIf="isAdmin"
+               routerLink="/admin"
+               routerLinkActive="text-red-600 after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-red-600 after:rounded"
+               class="relative py-2 px-3 text-gray-800 font-medium transition-colors hover:text-red-600 focus:text-red-600">
+              Admin
+            </a>
 
-              <div *ngIf="currentUser" class="user-menu desktop-only">
-                <div class="user-info">
-                  <span class="user-name">{{ currentUser.firstName }}</span>
-                  <span class="user-role" [class.admin]="currentUser.role === 'admin'">
-                    {{ currentUser.role === 'admin' ? 'Admin' : 'Utilisateur' }}
-                  </span>
-                </div>
-                <button class="logout-btn" (click)="logout()">
-                  Déconnexion
-                </button>
-              </div>
-
-              <button class="mobile-menu-btn mobile-only" (click)="toggleMobileMenu()">
-                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
-                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
-                <span class="hamburger" [class.active]="mobileMenuOpen"></span>
-              </button>
-            </div>
+            <a routerLink="/about"
+               routerLinkActive="text-red-600 after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-red-600 after:rounded"
+               class="relative py-2 px-3 text-gray-800 font-medium transition-colors hover:text-red-600 focus:text-red-600">
+              À propos
+            </a>
           </div>
 
-          <!-- Mobile Menu -->
-          <div class="mobile-menu mobile-only" [class.open]="mobileMenuOpen">
-            <div class="mobile-nav-links">
-              <a routerLink="/" (click)="closeMobileMenu()">Accueil</a>
-              <a routerLink="/search" (click)="closeMobileMenu()">Recherche</a>
-              <a routerLink="/about" (click)="closeMobileMenu()">À propos</a>
-              <a routerLink="/resources" (click)="closeMobileMenu()">Ressources</a>
-              <a *ngIf="isAdmin" routerLink="/admin" (click)="closeMobileMenu()">Admin</a>
-              <a *ngIf="currentUser" routerLink="/report" (click)="closeMobileMenu()" class="mobile-report-btn">
-                Signaler une disparition
-              </a>
-              <div class="mobile-auth" *ngIf="!currentUser">
-                <a routerLink="/login" (click)="closeMobileMenu()">Connexion</a>
-                <a routerLink="/register" (click)="closeMobileMenu()">Inscription</a>
-              </div>
-              <div class="mobile-user" *ngIf="currentUser">
-                <div class="mobile-user-info">
-                  <span class="mobile-user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
-                  <span class="mobile-user-role" [class.admin]="currentUser.role === 'admin'">
-                    {{ currentUser.role === 'admin' ? 'Admin' : 'Utilisateur' }}
-                  </span>
+
+
+          <div class="flex items-center gap-4">
+            <a *ngIf="!currentUser"
+               routerLink="/login"
+               class="hidden md:inline-flex bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white py-2 px-4 rounded m-1 font-medium transition-colors">
+              Connexion
+            </a>
+            <a *ngIf="!currentUser"
+               routerLink="/register"
+               class="hidden md:inline-flex bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white py-2 px-4 rounded m-1 font-medium transition-colors">
+              Inscription
+            </a>
+            <a *ngIf="currentUser" routerLink="/report" class="btn btn-primary btn-sm hidden md:inline-flex">
+              Signaler une disparition
+            </a>
+
+            <div *ngIf="currentUser" class="hidden md:flex items-center gap-4">
+              <div class="text-right">
+                <div class="text-sm font-semibold text-gray-800">{{ currentUser.firstName }}</div>
+                <div class="text-xs text-gray-500 uppercase" [class.text-primary-600]="currentUser.role === 'admin'" [class.font-semibold]="currentUser.role === 'admin'">
+                  {{ currentUser.role === 'admin' ? 'Admin' : 'Utilisateur' }}
                 </div>
-                <button (click)="logout(); closeMobileMenu()">Déconnexion</button>
               </div>
+              <button (click)="logout()" class="btn btn-secondary btn-sm">
+                Déconnexion
+              </button>
+            </div>
+
+            <button class="md:hidden p-3 rounded-lg hover:bg-gray-100 transition-colors" (click)="toggleMobileMenu()">
+              <ng-icon [name]="mobileMenuOpen ? 'heroXMark' : 'heroBars3'" size="24" class="text-gray-600"></ng-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+             [class]="mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'">
+          <div class="py-4 space-y-2 border-t border-gray-200">
+            <a routerLink="/" (click)="closeMobileMenu()"
+               class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+              Accueil
+            </a>
+            <a routerLink="/search" (click)="closeMobileMenu()"
+               class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+              Recherche
+            </a>
+            <a routerLink="/about" (click)="closeMobileMenu()"
+               class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+              À propos
+            </a>
+            <a *ngIf="isAdmin" routerLink="/admin" (click)="closeMobileMenu()"
+               class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+              <ng-icon name="heroCog6Tooth" size="16" class="inline mr-2"></ng-icon>
+              Admin
+            </a>
+            <a *ngIf="currentUser" routerLink="/report" (click)="closeMobileMenu()"
+               class="block px-4 py-3 bg-primary-600 text-white hover:bg-primary-700 rounded-lg transition-colors font-semibold my-2">
+              <ng-icon name="heroPlus" size="16" class="inline mr-2"></ng-icon>
+              Signaler une disparition
+            </a>
+
+            <div class="pt-4 border-t border-gray-200" *ngIf="!currentUser">
+              <a routerLink="/login" (click)="closeMobileMenu()"
+                 class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+                Connexion
+              </a>
+              <a routerLink="/register" (click)="closeMobileMenu()"
+                 class="block px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-lg transition-colors">
+                Inscription
+              </a>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200" *ngIf="currentUser">
+              <div class="px-4 py-2">
+                <div class="font-semibold text-gray-800">{{ currentUser.firstName }} {{ currentUser.lastName }}</div>
+                <div class="text-sm text-gray-500 uppercase" [class.text-primary-600]="currentUser.role === 'admin'" [class.font-semibold]="currentUser.role === 'admin'">
+                  {{ currentUser.role === 'admin' ? 'Admin' : 'Utilisateur' }}
+                </div>
+              </div>
+              <button (click)="logout(); closeMobileMenu()"
+                      class="w-full text-left px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors font-medium">
+                Déconnexion
+              </button>
             </div>
           </div>
         </div>
@@ -86,277 +137,6 @@ import { User } from '../../models/user.model';
     </header>
   `,
   styles: [`
-    .header {
-      background-color: var(--white);
-      box-shadow: var(--shadow-sm);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .nav-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 70px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-2);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 20px;
-      color: var(--primary-red);
-    }
-
-    .logo-icon {
-      font-size: 24px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: var(--spacing-12);
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--gray-600);
-      font-weight: 500;
-      transition: color 0.2s ease;
-      position: relative;
-      padding: var(--spacing-2) var(--spacing-3);
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--primary-red);
-    }
-
-    .nav-links a.active::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: var(--primary-red);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-4);
-    }
-
-    .btn-sm {
-      padding: var(--spacing-2) var(--spacing-4);
-      font-size: 14px;
-    }
-
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-4);
-    }
-
-    .user-info {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    .user-name {
-      font-weight: 600;
-      color: var(--gray-800);
-      font-size: 14px;
-    }
-
-    .user-role {
-      font-size: 12px;
-      color: var(--gray-500);
-      text-transform: uppercase;
-    }
-
-    .user-role.admin {
-      color: var(--primary-red);
-      font-weight: 600;
-    }
-
-    .logout-btn {
-      background: none;
-      border: 1px solid var(--gray-300);
-      color: var(--gray-600);
-      padding: var(--spacing-2) var(--spacing-3);
-      border-radius: var(--radius-md);
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .logout-btn:hover {
-      border-color: var(--primary-red);
-      color: var(--primary-red);
-    }
-    .mobile-menu-btn {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-      background: none;
-      border: none;
-      padding: var(--spacing-3);
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-    }
-
-    .hamburger {
-      width: 24px;
-      height: 2px;
-      background-color: var(--gray-600);
-      transition: all 0.3s ease;
-      transform-origin: center;
-    }
-
-    .hamburger.active:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background-color: var(--white);
-      box-shadow: var(--shadow-lg);
-      border-top: 1px solid var(--gray-200);
-      z-index: 1000;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    .mobile-menu.open {
-      display: block;
-      max-height: 500px;
-    }
-
-    .mobile-nav-links {
-      display: flex;
-      flex-direction: column;
-      padding: var(--spacing-4);
-    }
-
-    .mobile-nav-links a {
-      text-decoration: none;
-      color: var(--gray-600);
-      font-weight: 500;
-      padding: var(--spacing-4);
-      border-radius: var(--radius-md);
-      transition: all 0.2s ease;
-    }
-
-    .mobile-nav-links a:hover {
-      background-color: var(--gray-50);
-      color: var(--primary-red);
-    }
-
-    .mobile-report-btn {
-      background-color: var(--primary-red) !important;
-      color: var(--white) !important;
-      font-weight: 600 !important;
-      margin: var(--spacing-2) 0;
-    }
-
-    .mobile-auth {
-      display: flex;
-      flex-direction: column;
-      padding-top: var(--spacing-4);
-      margin-top: var(--spacing-4);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .mobile-user {
-      padding-top: var(--spacing-4);
-      margin-top: var(--spacing-4);
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .mobile-user-info {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: var(--spacing-3);
-    }
-
-    .mobile-user-name {
-      font-weight: 600;
-      color: var(--gray-800);
-    }
-
-    .mobile-user-role {
-      font-size: 12px;
-      color: var(--gray-500);
-      text-transform: uppercase;
-    }
-
-    .mobile-user-role.admin {
-      color: var(--primary-red);
-      font-weight: 600;
-    }
-
-    .mobile-user button {
-      background: none;
-      border: 1px solid var(--primary-red);
-      color: var(--primary-red);
-      font-weight: 500;
-      cursor: pointer;
-      padding: var(--spacing-2) var(--spacing-4);
-      border-radius: var(--radius-md);
-      width: 100%;
-      transition: all 0.2s ease;
-    }
-
-    .mobile-user button:hover {
-      background-color: var(--primary-red);
-      color: var(--white);
-    }
-
-    .desktop-only {
-      display: block;
-    }
-
-    .mobile-only {
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .desktop-only {
-        display: none;
-      }
-
-      .mobile-only {
-        display: flex;
-      }
-
-      .nav-content {
-        position: relative;
-      }
-
-      .container {
-        position: relative;
-      }
-    }
   `]
 })
 export class HeaderComponent {

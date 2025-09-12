@@ -6,31 +6,36 @@ import { MissingPersonService } from '../../services/missing-person.service';
 import { MissingPerson, SearchFilters } from '../../models/missing-person.model';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { MissingPersonCardComponent } from '../../components/missing-person-card/missing-person-card.component';
+import {NgIcon} from "@ng-icons/core";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, SearchBarComponent, MissingPersonCardComponent],
+  imports: [CommonModule, RouterModule, NgIcon, SearchBarComponent, MissingPersonCardComponent],
   template: `
-    <div class="home">
+    <div class="min-h-screen">
       <!-- Hero Section -->
-      <section class="hero">
-        <div class="hero-background">
-          <img src="https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Community" />
-          <div class="hero-overlay"></div>
+      <section class="relative h-screen flex items-center text-white overflow-hidden">
+        <div class="absolute inset-0 z-10">
+          <img src="https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=1600"
+               alt="Community"
+               class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-br from-dark-800/80 via-primary-600/60 to-primary-700/80"></div>
         </div>
-        
-        <div class="hero-content">
+
+        <div class="relative z-20 w-full">
           <div class="container">
-            <div class="hero-text">
-              <h1 class="hero-title">Aidez-nous à les ramener chez eux</h1>
-              <p class="hero-subtitle">
-                Rejoignez notre communauté dans la recherche de personnes disparues. 
+            <div class="text-center mb-12 animate-fade-in">
+              <h1 class="text-4xl text-[var(--primary-red)] md:text-6xl font-extrabold leading-tight mb-6 text-balance">
+                Aidez-nous à les ramener chez eux
+              </h1>
+              <p class="text-lg md:text-xl text-[var(--primary-red)] max-w-2xl mx-auto opacity-95 leading-relaxed">
+                Rejoignez notre communauté dans la recherche de personnes disparues.
                 Chaque partage, chaque indice, nous rapproche des réponses.
               </p>
             </div>
-            
-            <div class="hero-search">
+
+            <div class="max-w-4xl mx-auto animate-slide-up">
               <app-search-bar (search)="onSearch($event)"></app-search-bar>
             </div>
           </div>
@@ -38,293 +43,74 @@ import { MissingPersonCardComponent } from '../../components/missing-person-card
       </section>
 
       <!-- Recent Cases Section -->
-      <section class="recent-cases">
+      <section class="py-20 bg-white">
         <div class="container">
-          <div class="section-header">
-            <h2 class="section-title">Récemment ajoutés</h2>
-            <p class="section-subtitle">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Récemment ajoutés
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
               Les dernières personnes signalées comme disparues
             </p>
           </div>
 
-          <div class="loading" *ngIf="loading$ | async">
-            <div class="spinner"></div>
-            <p>Chargement...</p>
+          <div class="flex justify-center mb-8" *ngIf="loading$ | async">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div>
           </div>
 
-          <div class="cases-grid" *ngIf="!(loading$ | async)">
-            <app-missing-person-card 
-              *ngFor="let person of recentCases$ | async" 
-              [person]="person">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" *ngIf="!(loading$ | async)">
+            <app-missing-person-card
+                *ngFor="let person of recentCases$ | async"
+                [person]="person"
+                class="animate-bounce-in">
             </app-missing-person-card>
           </div>
 
-          <div class="section-actions">
-            <a routerLink="/search" class="btn btn-secondary">
+          <div class="text-center">
+            <a routerLink="/search" class="bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white py-2 px-4 rounded m-1 font-medium transition-colors">
               Voir tous les cas
             </a>
           </div>
         </div>
       </section>
-
-      <!-- Call to Action -->
-      <section class="cta">
-        <div class="container">
-          <div class="cta-content">
-            <h2 class="cta-title">Une personne est-elle portée disparue?</h2>
-            <p class="cta-subtitle">
-              Signalez immédiatement une disparition pour mobiliser la communauté
-            </p>
-            <a routerLink="/report" class="btn btn-primary btn-lg">
-              Signaler une disparition
-            </a>
+      <section class="py-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white">
+        <div class="container text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-red-500">
+            Une personne est-elle portée disparue?
+          </h2>
+          <p class="text-lg mb-8 opacity-95 max-w-2xl mx-auto text-red-500">
+            Signalez immédiatement une disparition pour mobiliser la communauté
+          </p>
+          <div class="flex justify-center mt-6">
+          <a routerLink="/report" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 w-max">
+            <ng-icon name="heroPlus" size="20"></ng-icon>
+            Signaler une disparition
+          </a>
           </div>
         </div>
       </section>
-
       <!-- Statistics -->
-      <section class="statistics">
-        <div class="container">
-          <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-number">{{ totalCases }}</div>
-              <div class="stat-label">Cas enregistrés</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">{{ foundCases }}</div>
-              <div class="stat-label">Personnes retrouvées</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">{{ activeCases }}</div>
-              <div class="stat-label">Recherches actives</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">98%</div>
-              <div class="stat-label">Taux de mobilisation</div>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white shadow-md rounded-lg p-4 text-center">
+          <div class="text-2xl font-bold text-gray-800">3</div>
+          <div class="text-gray-500 text-sm mt-1">Cas enregistrés</div>
         </div>
-      </section>
+        <div class="bg-white shadow-md rounded-lg p-4 text-center">
+          <div class="text-2xl font-bold text-gray-800">0</div>
+          <div class="text-gray-500 text-sm mt-1">Personnes retrouvées</div>
+        </div>
+        <div class="bg-white shadow-md rounded-lg p-4 text-center">
+          <div class="text-2xl font-bold text-gray-800">3</div>
+          <div class="text-gray-500 text-sm mt-1">Recherches actives</div>
+        </div>
+        <div class="bg-white shadow-md rounded-lg p-4 text-center">
+          <div class="text-2xl font-bold text-gray-800">98%</div>
+          <div class="text-gray-500 text-sm mt-1">Taux de mobilisation</div>
+        </div>
+      </div>
     </div>
   `,
-  styles: [`
-    .home {
-      min-height: 100vh;
-    }
-
-    .hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      color: var(--white);
-      overflow: hidden;
-    }
-
-    .hero-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-    }
-
-    .hero-background img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, 
-        rgba(30, 41, 59, 0.8) 0%, 
-        rgba(220, 38, 38, 0.6) 100%);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-    }
-
-    .hero-text {
-      text-align: center;
-      margin-bottom: var(--spacing-12);
-    }
-
-    .hero-title {
-      font-size: 3.5rem;
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: var(--spacing-6);
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-      opacity: 0.95;
-    }
-
-    .hero-search {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .recent-cases {
-      padding: var(--spacing-20) 0;
-      background-color: var(--white);
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: var(--spacing-12);
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--gray-800);
-      margin-bottom: var(--spacing-4);
-    }
-
-    .section-subtitle {
-      font-size: 1.125rem;
-      color: var(--gray-600);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .loading {
-      text-align: center;
-      padding: var(--spacing-16) 0;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--gray-200);
-      border-top: 3px solid var(--primary-red);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto var(--spacing-4);
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .cases-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: var(--spacing-8);
-      margin-bottom: var(--spacing-12);
-    }
-
-    .section-actions {
-      text-align: center;
-    }
-
-    .cta {
-      background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
-      color: var(--white);
-      padding: var(--spacing-20) 0;
-    }
-
-    .cta-content {
-      text-align: center;
-    }
-
-    .cta-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: var(--spacing-4);
-    }
-
-    .cta-subtitle {
-      font-size: 1.125rem;
-      margin-bottom: var(--spacing-8);
-      opacity: 0.95;
-    }
-
-    .btn-lg {
-      padding: var(--spacing-5) var(--spacing-10);
-      font-size: 1.125rem;
-    }
-
-    .statistics {
-      background-color: var(--gray-800);
-      color: var(--white);
-      padding: var(--spacing-16) 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--spacing-8);
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--primary-red);
-      margin-bottom: var(--spacing-2);
-    }
-
-    .stat-label {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    @media (max-width: 768px) {
-      .hero {
-        height: 80vh;
-      }
-
-      .hero-title {
-        font-size: 2.5rem;
-      }
-
-      .hero-subtitle {
-        font-size: 1.125rem;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-
-      .cta-title {
-        font-size: 2rem;
-      }
-
-      .cases-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-6);
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-6);
-      }
-
-      .stat-number {
-        font-size: 2.5rem;
-      }
-    }
-  `]
+  styles: []
 })
 export class HomeComponent implements OnInit {
   recentCases$: Observable<MissingPerson[]>;
@@ -347,8 +133,6 @@ export class HomeComponent implements OnInit {
   }
 
   onSearch(filters: SearchFilters) {
-    // Pour l'instant, on redirige vers la page de recherche
-    // Dans une vraie app, on pourrait passer les filtres en paramètres
     console.log('Search filters:', filters);
   }
 }

@@ -15,7 +15,8 @@ import { MissingPerson } from '../../models/missing-person.model';
           [alt]="person.fullName"
           (error)="onImageError($event)"
         />
-        <div class="status-badge" [class]="'status-' + person.status">
+        <div class="absolute top-3 right-3 px-3 py-1 rounded-md text-[12px] font-semibold uppercase"
+             [class]="'status-' + person.status">
           {{ getStatusText(person.status) }}
         </div>
       </div>
@@ -35,14 +36,12 @@ import { MissingPerson } from '../../models/missing-person.model';
         </div>
         
         <p class="person-description">{{ truncateDescription(person.description) }}</p>
-        
-        <div class="card-actions">
-          <a [routerLink]="['/person', person.id]" class="btn btn-primary btn-sm">
-            Voir les détails
+
+        <div class="flex justify-center gap-3 mt-auto">
+          <a [routerLink]="['/person', person.id]"
+             class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded btn-sm text-center w-full">
+            Voir le profil
           </a>
-          <button class="btn btn-secondary btn-sm">
-            Partager
-          </button>
         </div>
       </div>
     </div>

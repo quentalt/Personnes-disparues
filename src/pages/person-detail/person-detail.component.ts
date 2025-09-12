@@ -6,19 +6,22 @@ import { switchMap } from 'rxjs/operators';
 import { MissingPersonService } from '../../services/missing-person.service';
 import { AuthService } from '../../services/auth.service';
 import { MissingPerson } from '../../models/missing-person.model';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {matLock,matArrowBack} from "@ng-icons/material-icons/baseline";
 
 @Component({
   selector: 'app-person-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgIcon],
+  viewProviders: [provideIcons({
+    matLock,matArrowBack
+  })],
   template: `
     <div class="person-detail-page">
       <div class="container">
         <div class="back-navigation">
           <button class="back-btn" (click)="goBack()">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12.5 5l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <ng-icon name="matArrowBack" size="20" />
             Retour à la recherche
           </button>
         </div>
@@ -102,9 +105,7 @@ import { MissingPerson } from '../../models/missing-person.model';
               <div class="login-prompt" *ngIf="!isAuthenticated">
                 <div class="login-overlay">
                   <div class="login-message">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 1v6l3-3M12 7L9 4M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <ng-icon name="matLock" size="40" class="lock-icon" />
                     <h4>Connexion requise</h4>
                     <p>Connectez-vous pour voir les informations de contact</p>
                     <a routerLink="/login" class="btn btn-primary btn-sm">Se connecter</a>
@@ -354,8 +355,8 @@ import { MissingPerson } from '../../models/missing-person.model';
       padding: var(--spacing-6);
     }
 
-    .login-message svg {
-      color: var(--primary-red);
+    .lock-icon {
+      color: var(--primary-red) !important;
       margin-bottom: var(--spacing-3);
     }
 
@@ -396,6 +397,7 @@ import { MissingPerson } from '../../models/missing-person.model';
       border: 1px solid var(--primary-red);
       border-radius: var(--radius-md);
       padding: var(--spacing-4);
+      margin-top: var(--spacing-6);
     }
 
     .contact-note p {
